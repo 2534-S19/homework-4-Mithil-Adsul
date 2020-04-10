@@ -33,7 +33,7 @@ int main(void)
              EUSCI_A_UART_8_BIT_LEN                          // 8 BIT LENGTH
         };
 
-
+//kk
 
     // TODO: Make sure Tx AND Rx pins of EUSCI_A0 work for UART and not as regular GPIO pins.
 
