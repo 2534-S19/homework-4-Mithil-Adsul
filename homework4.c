@@ -61,7 +61,7 @@ int main(void)
         // TODO: Check the receive interrupt flag to see if a received character is available.
         //       Return 0xFF if no character is available.
 
-        if (UART_getInterruptStatus(EUSCI_A0_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT_FLAG)) //Check the receive interrupt flag.
+        if (UART_getInterruptStatus(EUSCI_A0_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT_FLAG) == EUSCI_A_UART_RECEIVE_INTERRUPT_FLAG) //Check the receive interrupt flag.
         {
             rChar = UART_receiveData(EUSCI_A0_BASE);
         }
@@ -77,7 +77,7 @@ int main(void)
 
         if(rChar != 0xFF)
         {
-            if (UART_getInterruptStatus(EUSCI_A0_BASE, EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG)) //Check for transmit interrupt flag.
+            if (UART_getInterruptStatus(EUSCI_A0_BASE, EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG) == EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG) //Check for transmit interrupt flag.
             {
                 UART_transmitData(EUSCI_A0_BASE, rChar);    //Transmit the data (rChar) to the terminal.
                 charFSM(rChar); //Update the FSM with the data, (rChar)
@@ -125,7 +125,7 @@ bool charFSM(char rChar) //Characters are passed here.
 
 
 
-    switch (currentState) {
+    /*switch (currentState) {
     case S0:
         break;
     case S2:
@@ -135,9 +135,9 @@ bool charFSM(char rChar) //Characters are passed here.
     case S253:
         break;
     case S2534:
-        break;
-    }
+        break; */
 
+    //}
         switch (currentState) {
             case S0:
                 if (rChar == '2')
