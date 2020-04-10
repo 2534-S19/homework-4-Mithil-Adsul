@@ -99,7 +99,7 @@ int main(void)
           int i = 0;
             while( i <= strlen("\n\n\r2534 is the best course in the curriculum!\r\n\n") )
             {
-               if (UART_getInterruptStatus(EUSCI_A0_BASE, EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG) == 1)
+               if (UART_getInterruptStatus(EUSCI_A0_BASE, EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG) == EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG)
                {
                    UART_transmitData(EUSCI_A0_BASE, phrase[i]);
                    i++;
@@ -135,9 +135,9 @@ bool charFSM(char rChar) //Characters are passed here.
     case S253:
         break;
     case S2534:
-        break; */
+        break
 
-    //}
+    }*/
         switch (currentState) {
             case S0:
                 if (rChar == '2')
