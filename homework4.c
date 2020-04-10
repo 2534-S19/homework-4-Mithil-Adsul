@@ -21,10 +21,10 @@ int main(void)
     //       To begin, configure the UART for 9600 baud, 8-bit payload (LSB first), no parity, 1 stop bit.
 
     eUSCI_UART_Config uartConfig = {
-             EUSCI_A_UART_CLOCKSOURCE_SMCLK,                 // SMCLK Clock Source = 10MHz
-             65,                                             // UCBR = 65
-             1,                                              // UCBRF = 1
-             0xD6,                                           // UCBRS = 0xD6
+             EUSCI_A_UART_CLOCKSOURCE_SMCLK,                 // SMCLK Clock Source = 3MHz
+             19,                                             // UCBR = 19
+             8,                                              // UCBRF = 8
+             0x55,                                           // UCBRS = 0x55
              EUSCI_A_UART_NO_PARITY,                         // No Parity
              EUSCI_A_UART_LSB_FIRST,                         // LSB First
              EUSCI_A_UART_ONE_STOP_BIT,                      // One stop bit
@@ -159,9 +159,11 @@ bool charFSM(char rChar) //Characters are passed here.
                 break;
 
             case S253:
-                if (rChar == '4') {
+                if (rChar == '4')
+                   {
                     currentState = S2534;
-                    finished = true; }
+                    finished = true;
+                   }
                 else
                     currentState = S0;
                 break;
@@ -170,6 +172,7 @@ bool charFSM(char rChar) //Characters are passed here.
                 currentState = S0;
                 break;
         }
+
 
 
     return finished;
