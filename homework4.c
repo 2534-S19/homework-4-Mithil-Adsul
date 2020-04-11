@@ -1,18 +1,18 @@
 #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
 #include "homework4.h"
 #include "string.h"
-typedef enum {S0, S2, S25, S253, S2534} state;
+
 
 int main(void)
 {
 
-    char *response = "\n\n\r2534 is the best course in the curriculum!\r\n\n";
+    //char *response = "\n\n\r2534 is the best course in the curriculum!\r\n\n";
 
     // \n newline
     // \r carriage return
 
     // TODO: Declare the variables that main uses to interact with your state machine.
-    //bool finished;
+    bool found;
     char rChar;
 
     // Stops the Watchdog timer.
@@ -42,13 +42,12 @@ int main(void)
                GPIO_PRIMARY_MODULE_FUNCTION);
 
     GPIO_setAsPeripheralModuleFunctionOutputPin(
-            GPIO_PORT_P2, GPIO_PIN3,
+            GPIO_PORT_P1, GPIO_PIN3,
             GPIO_PRIMARY_MODULE_FUNCTION);
 
 
 
     // TODO: Initialize EUSCI_A0
-
     UART_initModule(EUSCI_A0_BASE, &uartConfig);
 
     // TODO: Enable EUSCI_A0
@@ -80,7 +79,13 @@ int main(void)
             if (UART_getInterruptStatus(EUSCI_A0_BASE, EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG) == EUSCI_A_UART_TRANSMIT_INTERRUPT_FLAG) //Check for transmit interrupt flag.
             {
                 UART_transmitData(EUSCI_A0_BASE, rChar);    //Transmit the data (rChar) to the terminal.
-                charFSM(rChar); //Update the FSM with the data, (rChar)
+
+            }
+
+            if ( (rChar == '2') || (rChar == '5') || (rChar == '3') || (rChar == '4') )
+            {
+                found = charFSM(rChar);
+
             }
         }
 
@@ -94,8 +99,10 @@ int main(void)
 
         char phrase[] = "\n\n\r2534 is the best course in the curriculum!\r\n\n";
 
-        if(charFSM(rChar))
+        //if 2 5 3 or 4 then call FSM
+        if(found)
         {
+
           int i = 0;
             while( i <= strlen("\n\n\r2534 is the best course in the curriculum!\r\n\n") )
             {
@@ -104,6 +111,11 @@ int main(void)
                    UART_transmitData(EUSCI_A0_BASE, phrase[i]);
                    i++;
                }
+            }
+
+            if (i == strlen("\n\n\r2534 is the best course in the curriculum!\r\n\n"))
+            {
+                i = 0;
             }
         }
 
@@ -120,24 +132,11 @@ void initBoard()
 // TODO: FSM for detecting character sequence.
 bool charFSM(char rChar) //Characters are passed here.
 {
+    typedef enum {S0, S2, S25, S253} state;
     bool finished = false;
     static state currentState = S0;
 
 
-
-    /*switch (currentState) {
-    case S0:
-        break;
-    case S2:
-        break;
-    case S25:
-        break;
-    case S253:
-        break;
-    case S2534:
-        break
-
-    }*/
         switch (currentState) {
             case S0:
                 if (rChar == '2')
@@ -147,6 +146,8 @@ bool charFSM(char rChar) //Characters are passed here.
             case S2:
                 if (rChar == '5')
                     currentState = S25;
+                else if (rChar == '2')
+                    currentState = S2;
                 else
                     currentState = S0;
                 break;
@@ -154,6 +155,8 @@ bool charFSM(char rChar) //Characters are passed here.
             case S25:
                 if (rChar == '3')
                     currentState = S253;
+                else if (rChar == '2')
+                    currentState = S2;
                 else
                     currentState = S0;
                 break;
@@ -161,16 +164,14 @@ bool charFSM(char rChar) //Characters are passed here.
             case S253:
                 if (rChar == '4')
                    {
-                    currentState = S2534;
+                    currentState = S0;
                     finished = true;
                    }
                 else
                     currentState = S0;
                 break;
 
-            case S2534:
-                currentState = S0;
-                break;
+
         }
 
 
